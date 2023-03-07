@@ -1,55 +1,72 @@
-﻿// Задача 3: Задайте массив вещественных чисел. Найдите разницу между максимальным и минимальным элементов массива.
+﻿// Задача 3. Задайте двумерный массив из целых чисел. Найдите среднее арифметическое элементов в каждом столбце.
+// Например, задан массив:
+// 1 4 7 2
+// 5 9 2 3
+// 8 4 2 4
+// Среднее арифметическое каждого столбца: 4,6; 5,6; 3,6; 3.
 
-// [3 7 22 2 78] -> 76
 
-int InputUser(string msg) // тип возвращаемого значение (int) название метода. в скобках тип параметра который метод принемает. 
+// Генерируем массив случайных чисел 
+int[,] GenerateArray(int row, int col)
 {
-    Console.Write($"{msg} = >");
-    int userNumber = Convert.ToInt32(Console.ReadLine());
-    return userNumber;
-}
-// Метод заполнения массива случайными положительными числами
-double[] FillArray(double[] array)
-{
-    Random rnd = new Random();
-    for (int i = 0; i < array.Length; i++)
+    int[,] array = new int[row, col]; // Создаем 2-мерный массив
+    Random random = new Random();
+    for (int i = 0; i < array.GetLength(0); i++)
     {
-        array[i] = Convert.ToDouble(rnd.Next(1, 1000) / 10.0);
+        for (int j = 0; j < array.GetLength(1); j++)
+        {
+            array[i, j] = random.Next(2, 10);
+        }
     }
-
     return array;
 }
-
-double DifferenceMaxMinArray(double[] intArray)
+// вводим содержимое двухмероного массива
+void PrintArray(int[,] array)
 {
-    double min = intArray[0];
-    double max = intArray[1];
-    if (min > max)
+    for (int i = 0; i < array.GetLength(0); i++)
     {
-        max = min;
-        min = intArray[1];
-    }
-    for (int i = 2; i < intArray.Length; i++)
-    {
-        if (max < intArray[i]) max = intArray[i];
-        if (min > intArray[i]) min = intArray[i];
-    }
-    return Math.Round(max - min, 2);
-}
-//  метод показывает количество четных чисел в массиве
-void PrintArray(double[] array)
-{
-    for (int i = 0; i < array.Length; i++)
-    {
-        Console.Write($"{array[i]}  ");
+        Console.WriteLine();
+        for (int j = 0; j < array.GetLength(1); j++)
+        {
+            Console.Write($"{array[i, j]}\t");
+        }
     }
     Console.WriteLine();
 
 }
+//метод который считает среднеарифметическое каждого клонки массива 
+double[] AverageArray(int[,] array) // заголовок метода который возвращает массив со средним значением. 
+{
+    double[]result=new double[array.GetLength(1)]; //создания массива для вычесление средного значение.
+    for (int i = 0; i < array.GetLength(1); i++) // цикл по колонкам 
+    {
+        for (int j = 0; j < array.GetLength(0); j++) // цикл по строкам 
+        {
+            result[i] += array[j, i]; // суммируем колонку
+        }
+        result[i] = result[i] / array.GetLength(0); // делим сумму на количество элементов получаем среданее значение 
+      
+    }
+    return result; 
+}
 
-int userNumber = InputUser("Введите колличество элементов массива ");
-double[] myArray = new double[userNumber];
-FillArray(myArray);
-PrintArray(myArray);
+void PrintAverage(double[]avg)  // Функция которая печатает массив со средними значениями. 
+{
+    for (int i = 0; i < avg.GetLength(0); i++) // цикл по элементам массива 
+    {
+        Console.Write($"{avg[i]}\t"); // печать элементов массива 
+    }
+    Console.WriteLine();
+}
 
-Console.WriteLine($"Разница между максимальными и минимальными элементами массива равна {DifferenceMaxMinArray(myArray)} ");
+
+
+int[,] matrix = GenerateArray(4, 4);
+PrintArray(matrix);
+Console.WriteLine($"cреднее арифметическое элементов в каждом столбце равны = ");
+PrintAverage(AverageArray(matrix));
+
+// int[,] matrix = GenerateArray(4, 4);
+// GenerateArray(array[int,j]) ;
+// PrintArray(matrix);
+// Console.WriteLine($"индексы поискового элемента равны = {PrintArray}");
